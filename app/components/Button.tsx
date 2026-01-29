@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({ label, onClick, disabled, outline, smal
 		<button
 			onClick={onClick}
 			disabled={disabled}
-			className={`relative disabled:opacity-70 disabled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full ${outlineStyles} ${smallStyles}`}>
+			className={`cursor-pointer relative disabled:opacity-70 disabled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full ${outlineStyles} ${smallStyles}`}>
 			{Icon && <Icon size={24} className="absolute left-4 top-3" />}
 			{label}
 		</button>
