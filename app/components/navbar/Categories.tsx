@@ -19,6 +19,8 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import { FaSkiing } from 'react-icons/fa'
 import { BsSnow } from 'react-icons/bs'
 import { IoDiamond } from 'react-icons/io5'
+import { Suspense } from 'react'
+import Loader from '../Loader'
 
 export const categories = [
 	{
@@ -98,7 +100,7 @@ export const categories = [
 	},
 ]
 
-const Categories = () => {
+const CategoriesContent = () => {
 	const params = useSearchParams()
 	const category = params?.get('category')
 	const pathname = usePathname()
@@ -112,16 +114,18 @@ const Categories = () => {
 		<Container>
 			<div className="pt-4 flex flex-row items-center justify-between overflow-x-auto">
 				{categories.map(item => (
-					<CategoryBox
-						key={item.label}
-						label={item.label}
-						description={item.description}
-						selected={category === item.label}
-						icon={item.icon}
-					/>
+					<CategoryBox key={item.label} label={item.label} selected={category === item.label} icon={item.icon} />
 				))}
 			</div>
 		</Container>
+	)
+}
+
+const Categories = () => {
+	return (
+		<Suspense fallback={<Loader />}>
+			<CategoriesContent />
+		</Suspense>
 	)
 }
 export default Categories
