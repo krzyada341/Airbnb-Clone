@@ -8,11 +8,10 @@ import qs from 'query-string'
 interface CategoryBoxProps {
 	icon: IconType
 	label: string
-	description: string
 	selected?: boolean
 }
 
-const CategoryBox: React.FC<CategoryBoxProps> = ({ icon: Icon, label, description, selected }) => {
+const CategoryBox: React.FC<CategoryBoxProps> = ({ icon: Icon, label, selected }) => {
 	const router = useRouter()
 	const params = useSearchParams()
 
@@ -23,7 +22,7 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({ icon: Icon, label, descriptio
 			currentQuery = qs.parse(params.toString())
 		}
 
-		const updatedQuery: any = {
+		const updatedQuery: Record<string, string | string[] | undefined> = {
 			...currentQuery,
 			category: label,
 		}

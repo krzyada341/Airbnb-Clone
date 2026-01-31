@@ -20,7 +20,10 @@ export default async function getFavoriteListings() {
 		const safeFavorites = favorites.map(favorite => ({ ...favorite, createdAt: favorite.createdAt.toISOString() }))
 
 		return safeFavorites
-	} catch (error: any) {
-		throw new Error(error)
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			throw new Error(error.message)
+		}
+		throw new Error('An unknown error occurred')
 	}
 }

@@ -7,8 +7,7 @@ import ListingHead from '@/app/components/listings/ListingHead'
 import ListingInfo from '@/app/components/listings/ListingInfo'
 import { categories } from '@/app/components/navbar/Categories'
 import { SafeListing, SafeReservation, SafeUser } from '@/app/types'
-import { Reservation } from '@prisma/client'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import useLoginModal from '@/app/hooks/useLoginModal'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
@@ -47,8 +46,17 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing, reservations = [
 	}, [reservations])
 
 	const [isLoading, setIsLoading] = useState(false)
-	const [totalPrice, setTotalPrice] = useState(listing.price)
 	const [dateRange, setDateRange] = useState<Range>(initialDateRange)
+
+	const totalPrice = useMemo(() => {
+		if (dateRange.startDate && dateRange.endDate) {
+			const dayCount = differenceInCalendarDays(dateRange.endDate, dateRange.startDate)
+			if (dayCount && listing.price) {
+				return dayCount * listing.price
+			}
+		}
+		return listing.price
+	}, [dateRange, listing.price])
 
 	const onCreateReservation = useCallback(() => {
 		if (!currentUser) {
@@ -73,18 +81,7 @@ const ListingClient: React.FC<ListingClientProps> = ({ listing, reservations = [
 			.finally(() => {
 				setIsLoading(false)
 			})
-	}, [totalPrice, dateRange, listing?.id, router, currentUser, loginModal])
-
-	useEffect(() => {
-		if (dateRange.startDate && dateRange.endDate) {
-			const dayCount = differenceInCalendarDays(dateRange.endDate, dateRange.startDate)
-			if (dayCount && listing.price) {
-				setTotalPrice(dayCount * listing.price)
-			} else {
-				setTotalPrice(listing.price)
-			}
-		}
-	}, [dateRange, listing.price])
+	}, [totalPrice, dateRange, listing.id, router, currentUser, loginModal])
 
 	const category = useMemo(() => {
 		return categories.find(category => category.label === listing.category)

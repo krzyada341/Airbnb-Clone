@@ -1,4 +1,5 @@
 import prisma from '@/app/libs/prismadb'
+import { Prisma } from '@prisma/client'
 
 export interface IListingsParams {
 	userId?: string
@@ -15,7 +16,7 @@ export default async function getListings(params: Promise<IListingsParams>) {
 	try {
 		const { userId, guestCount, roomCount, bathroomCount, startDate, endDate, locationValue, category } = await params
 
-		let query: any = {}
+		const query: Prisma.ListingWhereInput = {}
 
 		if (userId) {
 			query.userId = userId
@@ -68,7 +69,10 @@ export default async function getListings(params: Promise<IListingsParams>) {
 		})
 		const safeListings = listings.map(listing => ({ ...listing, createdAt: listing.createdAt.toISOString() }))
 		return safeListings
-	} catch (error: any) {
-		throw new Error(error)
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			throw new Error(error.message)
+		}
+		throw new Error('An unknown error occurred')
 	}
 }

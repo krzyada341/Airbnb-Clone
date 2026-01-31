@@ -60,9 +60,9 @@ const RentModal = () => {
 	const bathroomCount = watch('bathroomCount')
 	const imageSrc = watch('imageSrc')
 
-	const Map = useMemo(() => dynamic(() => import('../Map'), { ssr: false }), [location])
+	const Map = useMemo(() => dynamic(() => import('../Map'), { ssr: false }), [])
 
-	const setCustomValue = (id: string, value: any) => {
+	const setCustomValue = (id: string, value: unknown) => {
 		setValue(id, value, {
 			shouldValidate: true,
 			shouldDirty: true,

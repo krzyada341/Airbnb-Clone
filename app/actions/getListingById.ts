@@ -32,6 +32,7 @@ export default async function getListingById(params: Promise<IParams>) {
 			},
 		}
 	} catch (error) {
+		console.error(error)
 		throw new Error('Failed to fetch listing')
 	}
 }

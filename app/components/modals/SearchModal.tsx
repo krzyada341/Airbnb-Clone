@@ -30,7 +30,7 @@ const SearchModal = () => {
 	const [bathroomCount, setBathroomCount] = useState(1)
 	const [dateRange, setDateRange] = useState<Range>({ startDate: new Date(), endDate: new Date(), key: 'selection' })
 
-	const Map = useMemo(() => dynamic(() => import('../Map'), { ssr: false }), [location])
+	const Map = useMemo(() => dynamic(() => import('../Map'), { ssr: false }), [])
 
 	const onBack = useCallback(() => {
 		setStep(value => value - 1)
@@ -51,7 +51,7 @@ const SearchModal = () => {
 			currentQuery = qs.parse(params.toString())
 		}
 
-		const updatedQuery: any = {
+		const updatedQuery: Record<string, string | number | undefined> = {
 			...currentQuery,
 			locationValue: location?.value,
 			guestCount,
